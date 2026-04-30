@@ -55,3 +55,36 @@ class Spectrogram(nn.Module):
             mel_spec = mel_spec.squeeze(0)
 
         return mel_spec
+
+
+import timm
+
+class BirdModel(nn.Module):
+    def __init__(self, config=None):
+        super().__init__()
+        self.config = {
+            'scale':1,
+            'backbone_pooling':'avg',
+            'backbone':'tf_efficientnetv2_b0',
+            'dropout':0.1,
+            'pretrained':True,
+            'channels':1,
+            'num_labels':234,
+        }
+        if config: self.config.update(config)
+
+        self.training = True
+
+        self.backbone = timm.create_model(
+            self.config['backbone'], 
+            pretrained=self.config['pretrained'],  
+            num_classes=self.config['num_labels'],  
+            global_pool=self.config['backbone_pooling'],
+            in_chans=1,
+            drop_rate=self.config['dropout'],
+        )
+        feature_dim = self.backbone.num_features
+        
+    def forward(self, x):
+        labels = self.backbone(x)
+        return labels
