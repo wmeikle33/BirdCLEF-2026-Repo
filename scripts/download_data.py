@@ -1,7 +1,8 @@
+PATH = '/kaggle/input/competitions/birdclef-2026/'
+TEST_PATH = PATH + 'test_soundscapes/'
+TRAIN_PATH = PATH + 'train_soundscapes/'
+
 class BirdDataset(Dataset):
-    PATH = '/kaggle/input/competitions/birdclef-2026/'
-    TEST_PATH = PATH + 'test_soundscapes/'
-    TRAIN_PATH = PATH + 'train_soundscapes/'
     taxonomy = pd.read_csv(PATH+'taxonomy.csv')
     
     LABELS = list(np.unique(taxonomy.primary_label))
